@@ -1,2 +1,1 @@
-# server-template-vser-loader
-vser loader for serverside template compile
+自动生成服务端渲染模板
