@@ -1,0 +1,22 @@
+{
+  "name": "server-template-vser-loader",
+  "version": "1.0.1",
+  "description": "html parse loader for vser serverside template",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gentlemanchao/server-template-vser-loader.git"
+  },
+  "keywords": [
+    "vser server template loader"
+  ],
+  "author": "gentlemanchao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gentlemanchao/server-template-vser-loader/issues"
+  },
+  "homepage": "https://github.com/gentlemanchao/server-template-vser-loader#readme"
+}

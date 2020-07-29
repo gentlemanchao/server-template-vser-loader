@@ -7,9 +7,10 @@ module.exports = function (fileContent) {
     if (/module\.exports\s?=/.test(fileContent)) {
         fileContent = fileContent.replace(/module\.exports\s?=\s?/, '');
     } else fileContent = JSON.stringify(fileContent);
+    fileContent = removeRemark(fileContent);
     const path = this.context;
     const configPath = `${path}\\config.js`;
-    if (checkTemplateExist(configPath)) {
+    if (checkFileExist(configPath)) {
         const configStr = readFile(configPath);
         const config = ParseConfig(configStr);
         fileContent = parseComponent(fileContent, config);
@@ -17,7 +18,19 @@ module.exports = function (fileContent) {
     return "module.exports = " + replaceSrc(fileContent, this.query.exclude);
 };
 
+/**
+ * 移除注释
+ */
+function removeRemark(content) {
+    const reg = /<!--[\s\S]*?-->/g
+    return content.replace(reg, '');
+}
 
+/**
+ * 处理子组件引用
+ * @param {*} content 
+ * @param {*} components 
+ */
 function parseComponent(content, components) {
     for (let name in components) {
         let path = components[name];
@@ -34,10 +47,10 @@ function parseComponent(content, components) {
 
 
 /**
- * 检测是否具有后端模板
+ * 检测文件是否存在
  * @param {string} file 文件路径
  */
-function checkTemplateExist(file) {
+function checkFileExist(file) {
     return Fs.existsSync(file);
 }
 
