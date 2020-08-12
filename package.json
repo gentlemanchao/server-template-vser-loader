@@ -1,6 +1,6 @@
 {
   "name": "server-template-vser-loader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "html parse loader for vser serverside template",
   "main": "index.js",
   "scripts": {

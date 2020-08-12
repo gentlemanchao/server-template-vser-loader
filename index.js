@@ -1,8 +1,7 @@
 const Fs = require('fs');
 const Path = require('path');
-
 const ParseConfig = require('./src/parseConfig');
-
+const GLC_PATH = './src/.srglcp';
 module.exports = function (fileContent) {
     if (/module\.exports\s?=/.test(fileContent)) {
         fileContent = fileContent.replace(/module\.exports\s?=\s?/, '');
@@ -10,11 +9,25 @@ module.exports = function (fileContent) {
     fileContent = removeRemark(fileContent);
     const path = this.context;
     const configPath = `${path}\\config.js`;
-    if (checkFileExist(configPath)) {
-        const configStr = readFile(configPath);
-        const config = ParseConfig(configStr);
-        fileContent = parseComponent(fileContent, config);
+    let comps = {}; //所有自定义组件
+    let globalComps = {}; //全局组件
+    let _comps = {}; //私有组件
+
+    const glcPath = Path.resolve(this.rootContext, GLC_PATH);
+    //获取全局组件配置
+    if (checkFileExist(glcPath)) {
+        this.addDependency(glcPath);
+        globalComps = require(glcPath);
     }
+    //  获取私有组件配置
+    if (checkFileExist(configPath)) {
+        this.addDependency(configPath);
+        const configStr = readFile(configPath);
+        _comps = ParseConfig(configStr);
+    }
+    // 解析自定义组件
+    comps = Object.assign({}, globalComps, _comps);
+    fileContent = parseComponent(fileContent, comps);
     return "module.exports = " + replaceSrc(fileContent, this.query.exclude);
 };
 
